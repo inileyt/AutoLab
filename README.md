@@ -37,6 +37,21 @@ python3 tools/bentley_media.py      # cut-outs (WebP with alpha), originals, boo
 python3 tools/make_sources.py       # regenerates SOURCES.md from the files on disk
 ```
 
+## Your studio details: `js/config.js`
+
+Open `js/config.js` and fill in what applies (phone, WhatsApp, Telegram, email, address, map link, hours, Instagram).
+Empty fields stay hidden; nothing is shown that you did not enter. The file is public, so put no passwords in it.
+
 ## Booking form
 
-The form validates in the page but has no backend; connect it to your booking system before going live.
+Where a request goes depends on `js/config.js`:
+
+1. `formEndpoint` set (for example a free [Formspree](https://formspree.io) form): sent in the background.
+2. Otherwise `whatsapp` set: opens WhatsApp with the request filled in; the visitor presses send.
+3. Otherwise `email` set: opens the visitor's mail app with the request filled in.
+4. Nothing set: the page says plainly that online booking is not connected and nothing is sent.
+
+## Publish on GitHub Pages
+
+In the repository on GitHub: **Settings → Pages → Build and deployment → Source: Deploy from a branch →
+Branch: `main`, folder `/ (root)` → Save**. After a minute the site is at `https://<user>.github.io/<repo>/`.

@@ -198,10 +198,15 @@
       <div class="field"><label for="fSvc">Service</label>
         <select id="fSvc" name="service"><option>Signature wash</option><option>Decontamination &amp; correction</option><option>Protection</option></select>
       </div>
-      <div class="field"><label for="fContact">Email or phone</label><input id="fContact" name="contact" autocomplete="email" required></div>
-      <button class="btn" type="submit">Request a slot</button>
-      <p class="form__note mono" id="formNote" role="status">This demo page has no booking backend. Requests are not sent anywhere.</p>
+      <div class="field"><label for="fDate">Preferred date</label><input id="fDate" name="date" type="date"></div>
+      <div class="field"><label for="fContact">Phone or email</label><input id="fContact" name="contact" autocomplete="tel" required></div>
+      <button class="btn" type="submit" id="bookBtn">Request a slot</button>
+      <p class="form__note mono" id="formNote" role="status">Online booking is not connected yet. Requests are not sent anywhere.</p>
     </form>
+    <div class="contact" id="contact" hidden>
+      <p class="eyebrow mono">Find the bay</p>
+      <dl class="contact__list" id="contactList"></dl>
+    </div>
   </div>
 </section>
 
@@ -228,6 +233,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="js/config.js"></script>
 <script src="js/smoke.js"></script>
 <script src="js/main.js"></script>
 </body>

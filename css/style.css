@@ -259,7 +259,17 @@ a { color: inherit; }
 .book__inner { position: relative; z-index: 2; width: 100%; padding-block: 18vh 10vh;
   padding-left: calc(var(--gut-l) + var(--pad) - 16px); padding-right: calc(var(--gut-r) + var(--pad) - 16px); }
 .book .display { font-size: var(--t-xxl); margin-bottom: 5vh; }
-.form { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 14px; align-items: end; }
+.form { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)) auto; gap: 14px; align-items: end; }
+.field input[type="date"] { color-scheme: dark; min-height: 2.6em; }
+.form__note a { color: var(--chalk); }
+.contact { margin-top: 7vh; padding-top: 3vh; border-top: 1px solid var(--line); }
+.contact .eyebrow { margin-bottom: 1.2rem; }
+.contact__list { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px 32px; }
+.contact__list div { min-width: 0; }
+.contact__list dt { font-family: var(--f-mono); font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .1em; color: var(--steel); margin-bottom: 4px; }
+.contact__list dd { margin: 0; overflow-wrap: anywhere; user-select: text; }
+.contact__list a { text-decoration: none; border-bottom: 1px solid var(--line); }
+.contact__list a:hover { border-bottom-color: var(--bar); }
 .field { display: grid; gap: 6px; min-width: 0; }
 .field label { font-family: var(--f-mono); font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .1em; color: var(--steel); }
 .field input, .field select {

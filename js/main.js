@@ -73,15 +73,15 @@
       const speed = Math.abs(v);
       if (speed > 40 && r.right > 0 && r.left < window.innerWidth) {
         // arriving: a light haze; leaving under scroll: a fuller trail
-        const k = leaving ? 1 : 0.4;
+        const k = leaving ? 0.55 : 0.2;
         const rate = Math.min(1.5, speed / 1000) * k;
         const dir = Math.sign(v);
         pts.forEach(([px, py], i) => {
           if (Math.random() > rate) return;
           smoke.emit(px, py, {
             n: 1, vx: -dir * (50 + speed * 0.1), vy: -22, spread: 70,
-            size: r.width * (leaving ? (i === 0 ? 0.08 : 0.06) : (i === 0 ? 0.06 : 0.045)),
-            life: leaving ? 3.4 : 2.4, alpha: leaving ? .46 : .22,
+            size: r.width * (leaving ? (i === 0 ? 0.065 : 0.05) : (i === 0 ? 0.05 : 0.04)),
+            life: leaving ? 2.6 : 2, alpha: leaving ? .26 : .14,
           });
         });
       }
@@ -93,8 +93,8 @@
       if (!smoke) return;
       const { r, pts } = emitPoints();
       pts.forEach(([px, py], i) => smoke.emit(px, py, {
-        n: Math.round((i === 0 ? 24 : 16) * strength), vx: -200, vy: -34, spread: 200,
-        size: r.width * (i === 0 ? 0.09 : 0.07), life: 3.6, alpha: .44,
+        n: Math.round((i === 0 ? 9 : 6) * strength), vx: -170, vy: -30, spread: 150,
+        size: r.width * (i === 0 ? 0.075 : 0.06), life: 2.8, alpha: .28,
       }));
     }
 
@@ -256,9 +256,43 @@
     ScrollTrigger.create({ trigger: ".foot", start: "top bottom-=40", end: "max",
       onToggle: (st) => gsap.to("#slate", { autoAlpha: st.isActive ? 0 : 1, duration: .3 }) });
 
-    /* ---------- form (no backend: say so plainly) ---------- */
-    const form = $("#bookForm"), note = $("#formNote");
-    form.addEventListener("submit", (e) => {
+    /* ---------- contact details + booking (from js/config.js) ---------- */
+    const cfg = window.AUTOLAB_CONFIG || {};
+    const val = (k) => String(cfg[k] || "").trim();
+    const digits = (v) => v.replace(/[^\d]/g, "");
+    const esc = (v) => v.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const link = (href, text) => `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(text)}</a>`;
+
+    // only filled-in fields are shown; nothing is invented
+    const rows = [];
+    if (val("phone")) rows.push(["Phone", `<a href="tel:${esc(val("phone").replace(/[^\d+]/g, ""))}">${esc(val("phone"))}</a>`]);
+    if (val("whatsapp")) rows.push(["WhatsApp", link(`https://wa.me/${digits(val("whatsapp"))}`, "+" + digits(val("whatsapp")))]);
+    if (val("telegram")) rows.push(["Telegram", link(`https://t.me/${val("telegram").replace(/^@/, "")}`, "@" + val("telegram").replace(/^@/, ""))]);
+    if (val("email")) rows.push(["Email", `<a href="mailto:${esc(val("email"))}">${esc(val("email"))}</a>`]);
+    if (val("address")) rows.push(["Address", esc(val("address")) + (val("mapUrl") ? "<br>" + link(val("mapUrl"), "Open map") : "")]);
+    else if (val("mapUrl")) rows.push(["Map", link(val("mapUrl"), "Open map")]);
+    if (val("hours")) rows.push(["Hours", esc(val("hours"))]);
+    if (val("instagram")) rows.push(["Instagram", link(`https://instagram.com/${val("instagram").replace(/^@/, "")}`, "@" + val("instagram").replace(/^@/, ""))]);
+    if (rows.length) {
+      $("#contactList").innerHTML = rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+      $("#contact").hidden = false;
+    }
+
+    // where a booking request goes: a form service, else WhatsApp, else email, else nowhere (and we say so)
+    const channel = val("formEndpoint") ? "endpoint" : val("whatsapp") ? "whatsapp" : val("email") ? "email" : "none";
+    const form = $("#bookForm"), note = $("#formNote"), btn = $("#bookBtn");
+    const dateIn = $("#fDate");
+    try { dateIn.min = new Date().toISOString().slice(0, 10); } catch (e) { /* older browsers: no minimum */ }
+    note.textContent = {
+      endpoint: "Your request goes straight to the studio. We reply to confirm the time.",
+      whatsapp: "Sending opens WhatsApp with your request filled in. Press send there to book.",
+      email: "Sending opens your email app with your request filled in. Press send there to book.",
+      none: "Online booking is not connected yet. Requests are not sent anywhere.",
+    }[channel];
+    if (channel === "whatsapp") btn.textContent = "Send via WhatsApp";
+    if (channel === "email") btn.textContent = "Send by email";
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       let ok = true;
       $$("input[required]", form).forEach((i) => {
@@ -267,7 +301,35 @@
         if (bad) ok = false;
       });
       if (!ok) { note.textContent = "Fill in your name, car and a way to reach you."; return; }
-      note.textContent = `Thanks, ${$("#fName").value.trim()}. This demo has no booking backend, so the request was not sent anywhere.`;
+      const d = Object.fromEntries(new FormData(form));
+      const name = String(d.name).trim();
+      const text = ["AUTOLAB booking request", `Name: ${name}`, `Car: ${d.car}`, `Service: ${d.service}`,
+        `Preferred date: ${d.date || "any"}`, `Contact: ${d.contact}`].join("\n");
+
+      if (channel === "endpoint") {
+        btn.disabled = true; note.textContent = "Sending…";
+        try {
+          const r = await fetch(val("formEndpoint"), { method: "POST", headers: { Accept: "application/json" }, body: new FormData(form) });
+          if (!r.ok) throw new Error(r.status);
+          note.textContent = `Thanks, ${name}. Your request reached the studio; we will contact you to confirm the time.`;
+          form.reset();
+        } catch (err) {
+          note.textContent = "The request could not be sent. Please try again, or contact the studio directly.";
+        } finally { btn.disabled = false; }
+        return;
+      }
+      if (channel === "none") {
+        note.textContent = `Thanks, ${name}. Online booking is not connected yet, so this request was not sent anywhere.`;
+        return;
+      }
+      const url = channel === "whatsapp"
+        ? `https://wa.me/${digits(val("whatsapp"))}?text=${encodeURIComponent(text)}`
+        : `mailto:${val("email")}?subject=${encodeURIComponent("Booking request: " + d.service)}&body=${encodeURIComponent(text)}`;
+      // the visitor still has to press send in WhatsApp or their mail app, so the page never claims it was sent
+      note.innerHTML = `Your request is ready. If ${channel === "whatsapp" ? "WhatsApp" : "your email app"} did not open, `
+        + `<a href="${esc(url)}" target="_blank" rel="noopener">open it here</a>, then press send.`;
+      if (channel === "whatsapp") window.open(url, "_blank", "noopener");
+      else window.location.href = url;
     });
 
     window.addEventListener("load", () => ScrollTrigger.refresh());
