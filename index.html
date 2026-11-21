@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="hy">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,7 +8,7 @@
 <meta name="description" content="AUTOLAB detailing studio. One real black Bentley Continental GT, one wash bay, one session, told in real photographs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Armenian:wdth,wght@62.5..100,300..900&family=Golos+Text:wght@400..900&display=swap">
 <link rel="stylesheet" href="css/style.css">
 <link rel="preload" as="image" href="media/img/6872163-alpha-2560.webp" media="(min-width: 821px)">
 <link rel="preload" as="image" href="media/img/6872163-alpha-1280.webp" media="(max-width: 820px)">
@@ -18,7 +18,7 @@
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__inner">
     <span class="loader__mark">AUTOLAB</span>
-    <span class="loader__meta mono">Warming up · <b id="loaderPct">0</b>%</span>
+    <span class="loader__meta mono"><span data-i18n="loader.meta">Warming up</span> · <b id="loaderPct">0</b>%</span>
     <span class="loader__bar"><i id="loaderBar"></i></span>
   </div>
 </div>
@@ -26,17 +26,23 @@
 <header class="nav" id="nav">
   <a class="nav__mark" href="#hero" aria-label="AUTOLAB, back to top">AUTOLAB</a>
   <nav class="nav__links" aria-label="Sections">
-    <a href="#subject">The car</a>
-    <a href="#process">Process</a>
-    <a href="#services">Services</a>
+    <a href="#process" data-i18n="nav.process">Process</a>
+    <a href="#services" data-i18n="nav.services">Services</a>
+    <a href="#prices" data-i18n="nav.prices">Prices</a>
+    <a href="#reviews" data-i18n="nav.reviews">Reviews</a>
   </nav>
-  <a class="nav__cta" href="#book">Book a bay</a>
+  <div class="lang mono" role="group" aria-label="Language">
+    <button type="button" data-lang="hy" lang="hy">ՀԱՅ</button>
+    <button type="button" data-lang="en" lang="en">EN</button>
+    <button type="button" data-lang="ru" lang="ru">РУ</button>
+  </div>
+  <a class="nav__cta" href="#book" data-i18n="nav.cta">Book a bay</a>
 </header>
 
 <!-- Fixed slate: source photo number and camera bearing of whatever is on screen -->
 <div class="slate mono" id="slate" aria-hidden="true">
-  <span><em>Photo</em> <b id="slReel">6872163</b></span>
-  <span><em>Cam</em> <b id="slCam">30° front right</b></span>
+  <span><em data-i18n="slate.photo">Photo</em> <b id="slReel">6872163</b></span>
+  <span><em data-i18n="slate.cam">Cam</em> <b id="slCam" data-i18n="cam.hero">30° front right</b></span>
 </div>
 
 <main>
@@ -46,7 +52,7 @@
   <div class="hero__stage studio" id="heroStage">
     <div class="studio__floor" aria-hidden="true"></div>
     <div class="hero__copy">
-      <p class="eyebrow mono">Detailing studio · Bay 01</p>
+      <p class="eyebrow mono" data-i18n="hero.eyebrow">Detailing studio · Bay 01</p>
       <h1 class="hero__title" aria-label="AUTOLAB"><span class="hero__word" id="heroWord">AUTOLAB</span></h1>
     </div>
     <div class="car" id="car">
@@ -57,8 +63,8 @@
     </div>
     <canvas class="smoke" id="smoke" aria-hidden="true"></canvas>
     <div class="hero__foot">
-      <p class="hero__lede">One car. One bay. One session, told in real photographs.</p>
-      <div class="hero__scroll mono" id="heroScroll"><span>Scroll</span><i></i></div>
+      <p class="hero__lede" data-i18n="hero.lede">One car. One bay. One session, told in real photographs.</p>
+      <div class="hero__scroll mono" id="heroScroll"><span data-i18n="hero.scroll">Scroll</span><i></i></div>
     </div>
   </div>
 </section>
@@ -70,13 +76,13 @@
       <img src="media/img/6873074-alpha-1280.webp" srcset="media/img/6873074-alpha-1280.webp 1280w, media/img/6873074-alpha-2560.webp 2560w" sizes="80vw" alt="Black Bentley Continental GT head-on, matrix grille, headlights on" decoding="async">
     </figure>
     <div class="subject__copy">
-      <p class="eyebrow mono">The car on the bay</p>
+      <p class="eyebrow mono" data-i18n="subject.eyebrow">The car on the bay</p>
       <h2 class="display subject__name">Continental <span>GT</span></h2>
       <dl class="spec mono">
-        <div><dt>Maker</dt><dd>Bentley</dd></div>
-        <div><dt>Generation</dt><dd>Third (2018 on)</dd></div>
-        <div><dt>Paint</dt><dd>Black</dd></div>
-        <div><dt>Cabin</dt><dd>Red hide</dd></div>
+        <div><dt data-i18n="spec.maker">Maker</dt><dd>Bentley</dd></div>
+        <div><dt data-i18n="spec.gen">Generation</dt><dd data-i18n="spec.gen.v">Third (2018 on)</dd></div>
+        <div><dt data-i18n="spec.paint">Paint</dt><dd data-i18n="spec.paint.v">Black</dd></div>
+        <div><dt data-i18n="spec.cabin">Cabin</dt><dd data-i18n="spec.cabin.v">Red hide</dd></div>
       </dl>
     </div>
   </div>
@@ -86,51 +92,51 @@
 <section class="process" id="process">
   <div class="process__stage">
     <div class="process__rail">
-      <p class="eyebrow mono">The process</p>
+      <p class="eyebrow mono" data-i18n="process.eyebrow">The process</p>
       <ol class="steps" id="steps">
-        <li class="is-on"><span class="mono">01</span>Arrival</li>
-        <li><span class="mono">02</span>Surface</li>
-        <li><span class="mono">03</span>Snow foam</li>
-        <li><span class="mono">04</span>Hand wash</li>
-        <li><span class="mono">05</span>Detail</li>
-        <li><span class="mono">06</span>Finish</li>
+        <li class="is-on"><span class="mono">01</span><span data-i18n="step.1">Arrival</span></li>
+        <li><span class="mono">02</span><span data-i18n="step.2">Surface</span></li>
+        <li><span class="mono">03</span><span data-i18n="step.3">Snow foam</span></li>
+        <li><span class="mono">04</span><span data-i18n="step.4">Hand wash</span></li>
+        <li><span class="mono">05</span><span data-i18n="step.5">Detail</span></li>
+        <li><span class="mono">06</span><span data-i18n="step.6">Finish</span></li>
       </ol>
       <div class="rail__meter"><i id="railFill"></i></div>
     </div>
 
     <div class="screen" id="screen">
-      <div class="layer studio" data-step="0" data-reel="6873128" data-cam="0° head-on">
+      <div class="layer studio" data-step="0" data-reel="6873128" data-cam="cam.headon">
         <img class="kb kb--fit" src="media/img/6873128-alpha-1280.webp" srcset="media/img/6873128-alpha-1280.webp 1280w, media/img/6873128-alpha-2560.webp 2560w" sizes="60vw" alt="The Bentley parked head-on in the bay, headlights on" decoding="async">
       </div>
-      <div class="layer" data-step="1" data-reel="6873077" data-cam="Macro, windscreen">
+      <div class="layer" data-step="1" data-reel="6873077" data-cam="cam.surface">
         <img class="kb" loading="lazy" src="media/img/6873077-1280.webp" srcset="media/img/6873077-1280.webp 1280w, media/img/6873077-2560.webp 2560w" sizes="75vw" alt="Macro of the windscreen and scuttle, covered in water spots" decoding="async">
         <div class="marks" aria-hidden="true">
-          <span class="mark" style="--x:24%;--y:30%"><i></i><b class="mono">Water spotting</b></span>
-          <span class="mark" style="--x:58%;--y:66%"><i></i><b class="mono">Film on glass</b></span>
+          <span class="mark" style="--x:24%;--y:30%"><i></i><b class="mono" data-i18n="mark.1">Water spotting</b></span>
+          <span class="mark" style="--x:58%;--y:66%"><i></i><b class="mono" data-i18n="mark.2">Film on glass</b></span>
         </div>
       </div>
-      <div class="layer" data-step="2" data-reel="6872162" data-cam="Macro, headlight and grille">
+      <div class="layer" data-step="2" data-reel="6872162" data-cam="cam.foam">
         <img class="kb" loading="lazy" src="media/img/6872162-1280.webp" srcset="media/img/6872162-1280.webp 1280w, media/img/6872162-2560.webp 2560w" sizes="75vw" alt="Snow foam running over the headlight and matrix grille" decoding="async">
       </div>
-      <div class="layer" data-step="3" data-reel="6872146" data-cam="Macro, door mirror">
+      <div class="layer" data-step="3" data-reel="6872146" data-cam="cam.wash">
         <img class="kb" loading="lazy" src="media/img/6872146-1280.webp" srcset="media/img/6872146-1280.webp 1280w, media/img/6872146-2560.webp 2560w" sizes="75vw" alt="Sponge working foam over the black door mirror" decoding="async">
       </div>
-      <div class="layer" data-step="4" data-reel="6873010" data-cam="Macro, panel seam">
+      <div class="layer" data-step="4" data-reel="6873010" data-cam="cam.detail">
         <img class="kb" loading="lazy" src="media/img/6873010-1280.webp" srcset="media/img/6873010-1280.webp 1280w, media/img/6873010-2560.webp 2560w" sizes="75vw" alt="Detail brush clearing foam from a panel seam" decoding="async">
       </div>
-      <div class="layer" data-step="5" data-reel="6873192" data-cam="Front right, low">
+      <div class="layer" data-step="5" data-reel="6873192" data-cam="cam.finish">
         <img class="kb" loading="lazy" src="media/img/6873192-1280.webp" srcset="media/img/6873192-1280.webp 1280w, media/img/6873192-2560.webp 2560w" sizes="75vw" alt="Finished car: headlight lit, deep black paint" decoding="async">
       </div>
       <div class="wipe" id="wipe"></div>
     </div>
 
     <div class="captions" id="captions">
-      <div class="cap is-on"><h3>Arrival</h3><p>The car rolls in and we read every panel under the bay lights before anything touches the paint.</p></div>
-      <div class="cap"><h3>Surface</h3><p>Up close, water spots and road film sit on the glass and in every seam. Black paint shows every mark.</p></div>
-      <div class="cap"><h3>Snow foam</h3><p>Foam dwells over the grille, lights and shut lines and loosens the grit before a mitt goes near it.</p></div>
-      <div class="cap"><h3>Hand wash</h3><p>Panel by panel, top to bottom, with a soft sponge that is rinsed after every pass.</p></div>
-      <div class="cap"><h3>Detail</h3><p>Soft brushes clear foam from the seams, badges and mesh that a mitt cannot reach.</p></div>
-      <div class="cap"><h3>Finish</h3><p>Same car, same bay. Clear lenses, deep black paint, and the lights doing the rest.</p></div>
+      <div class="cap is-on"><h3 data-i18n="step.1">Arrival</h3><p data-i18n="cap.1">The car rolls in and we read every panel under the bay lights before anything touches the paint.</p></div>
+      <div class="cap"><h3 data-i18n="step.2">Surface</h3><p data-i18n="cap.2">Up close, water spots and road film sit on the glass and in every seam. Black paint shows every mark.</p></div>
+      <div class="cap"><h3 data-i18n="step.3">Snow foam</h3><p data-i18n="cap.3">Foam dwells over the grille, lights and shut lines and loosens the grit before a mitt goes near it.</p></div>
+      <div class="cap"><h3 data-i18n="step.4">Hand wash</h3><p data-i18n="cap.4">Panel by panel, top to bottom, with a soft sponge that is rinsed after every pass.</p></div>
+      <div class="cap"><h3 data-i18n="step.5">Detail</h3><p data-i18n="cap.5">Soft brushes clear foam from the seams, badges and mesh that a mitt cannot reach.</p></div>
+      <div class="cap"><h3 data-i18n="step.6">Finish</h3><p data-i18n="cap.6">Same car, same bay. Clear lenses, deep black paint, and the lights doing the rest.</p></div>
     </div>
   </div>
 </section>
@@ -138,14 +144,14 @@
 <!-- 04 UP CLOSE: masked macro stills -->
 <section class="macro" id="macro">
   <div class="macro__head">
-    <p class="eyebrow mono">Up close</p>
-    <h2 class="display display--sm">What a finished car looks like at 20&nbsp;cm</h2>
+    <p class="eyebrow mono" data-i18n="macro.eyebrow">Up close</p>
+    <h2 class="display display--sm" data-i18n="macro.title">What a finished car looks like at 20 cm</h2>
   </div>
   <div class="macro__grid">
-    <figure class="mc mc--a" data-speed="-12"><div class="mc__img"><img loading="lazy" decoding="async" src="media/img/6873190-1280.webp" srcset="media/img/6873190-1280.webp 1280w, media/img/6873190-2560.webp 2560w" sizes="(max-width: 820px) 100vw, 55vw" alt="Twin headlight lenses on the black bonnet"></div><figcaption class="mono">Headlight lenses</figcaption></figure>
-    <figure class="mc mc--b" data-speed="10"><div class="mc__img"><img loading="lazy" decoding="async" src="media/img/6873076-1280.webp" srcset="media/img/6873076-1280.webp 1280w, media/img/6873076-2560.webp 2560w" sizes="(max-width: 820px) 100vw, 35vw" alt="Headlight on, flaring over the grille"></div><figcaption class="mono">Headlight, lit</figcaption></figure>
-    <figure class="mc mc--c" data-speed="-6"><div class="mc__img"><img loading="lazy" decoding="async" src="media/img/6873021-1280.webp" srcset="media/img/6873021-1280.webp 1280w, media/img/6873021-2560.webp 2560w" sizes="(max-width: 820px) 100vw, 40vw" alt="Lower intake mesh and front splitter"></div><figcaption class="mono">Lower intake mesh</figcaption></figure>
-    <figure class="mc mc--d" data-speed="14"><div class="mc__img"><img loading="lazy" decoding="async" src="media/img/6872573-1280.webp" srcset="media/img/6872573-1280.webp 1280w, media/img/6872573-2560.webp 2560w" sizes="(max-width: 820px) 100vw, 50vw" alt="Oval tail light glowing red on the rear haunch"></div><figcaption class="mono">Tail light</figcaption></figure>
+    <figure class="mc mc--a" data-speed="-12"><div class="mc__img"><img loading="lazy" decoding="async" src="media/img/6873190-1280.webp" srcset="media/img/6873190-1280.webp 1280w, media/img/6873190-2560.webp 2560w" sizes="(max-width: 820px) 100vw, 55vw" alt="Twin headlight lenses on the black bonnet"></div><figcaption class="mono" data-i18n="macro.a">Headlight lenses</figcaption></figure>
+    <figure class="mc mc--b" data-speed="10"><div class="mc__img"><img loading="lazy" decoding="async" src="media/img/6873076-1280.webp" srcset="media/img/6873076-1280.webp 1280w, media/img/6873076-2560.webp 2560w" sizes="(max-width: 820px) 100vw, 35vw" alt="Headlight on, flaring over the grille"></div><figcaption class="mono" data-i18n="macro.b">Headlight, lit</figcaption></figure>
+    <figure class="mc mc--c" data-speed="-6"><div class="mc__img"><img loading="lazy" decoding="async" src="media/img/6873021-1280.webp" srcset="media/img/6873021-1280.webp 1280w, media/img/6873021-2560.webp 2560w" sizes="(max-width: 820px) 100vw, 40vw" alt="Lower intake mesh and front splitter"></div><figcaption class="mono" data-i18n="macro.c">Lower intake mesh</figcaption></figure>
+    <figure class="mc mc--d" data-speed="14"><div class="mc__img"><img loading="lazy" decoding="async" src="media/img/6872573-1280.webp" srcset="media/img/6872573-1280.webp 1280w, media/img/6872573-2560.webp 2560w" sizes="(max-width: 820px) 100vw, 50vw" alt="Oval tail light glowing red on the rear haunch"></div><figcaption class="mono" data-i18n="macro.d">Tail light</figcaption></figure>
   </div>
 </section>
 
@@ -153,58 +159,112 @@
 <section class="services" id="services">
   <div class="services__inner">
     <div class="services__head">
-      <p class="eyebrow mono">Services</p>
-      <h2 class="display display--sm">Three ways into the bay</h2>
+      <p class="eyebrow mono" data-i18n="services.eyebrow">Services</p>
+      <h2 class="display display--sm" data-i18n="services.title">Three ways into the bay</h2>
     </div>
     <div class="svc-list">
       <article class="svc">
         <div class="svc__img"><img loading="lazy" decoding="async" src="media/img/6872609-1280.webp" alt="The Bentley covered in snow foam while a detailer works the bonnet"></div>
         <div class="svc__body">
-          <p class="mono svc__time">Bay time · about 2 h</p>
-          <h3>Signature wash</h3>
-          <p>Snow foam pre-wash, two-bucket hand wash, wheels and arches, filtered-air dry, glass and cabin wipe-down.</p>
+          <p class="mono svc__time" data-i18n="svc.1.time">Bay time · about 2 h</p>
+          <h3 data-i18n="svc.1">Signature wash</h3>
+          <p data-i18n="svc.1.desc">Snow foam pre-wash, two-bucket hand wash, wheels and arches, filtered-air dry, glass and cabin wipe-down.</p>
         </div>
       </article>
       <article class="svc">
         <div class="svc__img"><img loading="lazy" decoding="async" src="media/img/6873087-1280.webp" alt="Detailer brushing foam out of the headlight surround"></div>
         <div class="svc__body">
-          <p class="mono svc__time">Bay time · 1 day</p>
-          <h3>Decontamination &amp; correction</h3>
-          <p>Iron and tar removal, clay, paint-depth readings, then machine polishing to take out swirls and haze.</p>
+          <p class="mono svc__time" data-i18n="svc.2.time">Bay time · 1 day</p>
+          <h3 data-i18n="svc.2">Decontamination &amp; correction</h3>
+          <p data-i18n="svc.2.desc">Iron and tar removal, clay, paint-depth readings, then machine polishing to take out swirls and haze.</p>
         </div>
       </article>
       <article class="svc">
         <div class="svc__img studio"><img class="fit" loading="lazy" decoding="async" src="media/img/6872600-alpha-1280.webp" alt="The finished Bentley head-on, headlights on"></div>
         <div class="svc__body">
-          <p class="mono svc__time">Bay time · 2 days</p>
-          <h3>Protection</h3>
-          <p>Correction, then a ceramic coating cured under the bay lights, with a maintenance wash plan to keep it working.</p>
+          <p class="mono svc__time" data-i18n="svc.3.time">Bay time · 2 days</p>
+          <h3 data-i18n="svc.3">Protection</h3>
+          <p data-i18n="svc.3.desc">Correction, then a ceramic coating cured under the bay lights, with a maintenance wash plan to keep it working.</p>
         </div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- 06 BOOK -->
+<!-- 06 PRICES: sample prices for the portfolio project, labelled as such -->
+<section class="prices" id="prices">
+  <div class="prices__inner">
+    <div class="prices__head">
+      <p class="eyebrow mono" data-i18n="prices.eyebrow">Prices</p>
+      <h2 class="display display--sm" data-i18n="prices.title">Price list</h2>
+      <p class="prices__note mono" data-i18n="prices.note">Sample prices for this portfolio project.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="price-table">
+        <thead><tr>
+          <th scope="col" class="mono" data-i18n="prices.col.svc">Service</th>
+          <th scope="col" class="mono" data-i18n="prices.col.time">Time</th>
+          <th scope="col" class="mono" data-i18n="prices.col.car">Coupe / sedan</th>
+          <th scope="col" class="mono" data-i18n="prices.col.suv">SUV</th>
+        </tr></thead>
+        <tbody>
+          <tr><th scope="row" data-i18n="price.1">Signature wash</th><td class="mono" data-i18n-label="prices.col.time" data-i18n="price.1.t">2 h</td><td class="mono" data-i18n-label="prices.col.car">25 000 ֏</td><td class="mono" data-i18n-label="prices.col.suv">30 000 ֏</td></tr>
+          <tr><th scope="row" data-i18n="price.2">Interior detail</th><td class="mono" data-i18n-label="prices.col.time" data-i18n="price.2.t">4 h</td><td class="mono" data-i18n-label="prices.col.car">45 000 ֏</td><td class="mono" data-i18n-label="prices.col.suv">55 000 ֏</td></tr>
+          <tr><th scope="row" data-i18n="price.3">Decontamination and one-step polish</th><td class="mono" data-i18n-label="prices.col.time" data-i18n="price.3.t">1 day</td><td class="mono" data-i18n-label="prices.col.car">120 000 ֏</td><td class="mono" data-i18n-label="prices.col.suv">150 000 ֏</td></tr>
+          <tr><th scope="row" data-i18n="price.4">Two-step paint correction</th><td class="mono" data-i18n-label="prices.col.time" data-i18n="price.4.t">2 days</td><td class="mono" data-i18n-label="prices.col.car">220 000 ֏</td><td class="mono" data-i18n-label="prices.col.suv">270 000 ֏</td></tr>
+          <tr><th scope="row" data-i18n="price.5">Ceramic coating, with correction</th><td class="mono" data-i18n-label="prices.col.time" data-i18n="price.5.t">3 days</td><td class="mono" data-i18n-label="prices.col.car">380 000 ֏</td><td class="mono" data-i18n-label="prices.col.suv">450 000 ֏</td></tr>
+          <tr><th scope="row" data-i18n="price.6">Headlight restoration</th><td class="mono" data-i18n-label="prices.col.time" data-i18n="price.6.t">1 h</td><td class="mono" colspan="2" data-i18n-label="prices.col.car">20 000 ֏ <span data-i18n="price.6.p">per pair</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 07 REVIEWS: sample reviews for the portfolio project, labelled as such -->
+<section class="reviews" id="reviews">
+  <div class="reviews__inner">
+    <div class="reviews__head">
+      <p class="eyebrow mono" data-i18n="reviews.eyebrow">Reviews</p>
+      <h2 class="display display--sm" data-i18n="reviews.title">What clients say</h2>
+      <p class="reviews__note mono" data-i18n="reviews.note">Sample reviews written for this portfolio project.</p>
+    </div>
+    <div class="review-list">
+      <figure class="review">
+        <blockquote data-i18n="review.1"></blockquote>
+        <figcaption class="mono"><b data-i18n="review.1.by"></b> · <span data-i18n="svc.1">Signature wash</span></figcaption>
+      </figure>
+      <figure class="review">
+        <blockquote data-i18n="review.2"></blockquote>
+        <figcaption class="mono"><b data-i18n="review.2.by"></b> · <span data-i18n="svc.1">Signature wash</span></figcaption>
+      </figure>
+      <figure class="review">
+        <blockquote data-i18n="review.3"></blockquote>
+        <figcaption class="mono"><b data-i18n="review.3.by"></b> · <span data-i18n="svc.3">Protection</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 08 BOOK -->
 <section class="book" id="book">
   <img class="book__bg" loading="lazy" decoding="async" src="media/img/6872165-band-1280.webp" srcset="media/img/6872165-band-1280.webp 1280w, media/img/6872165-band-2560.webp 2560w" sizes="100vw" alt="Oval tail light of the Bentley glowing red">
   <div class="book__shade"></div>
   <div class="book__inner">
-    <p class="eyebrow mono">Bay 01 · Booking</p>
-    <h2 class="display">Book the bay.</h2>
+    <p class="eyebrow mono" data-i18n="book.eyebrow">Bay 01 · Booking</p>
+    <h2 class="display" data-i18n="book.title">Book the bay.</h2>
     <form class="form" id="bookForm" novalidate>
-      <div class="field"><label for="fName">Name</label><input id="fName" name="name" autocomplete="name" required></div>
-      <div class="field"><label for="fCar">Car</label><input id="fCar" name="car" placeholder="Make, model, year" required></div>
-      <div class="field"><label for="fSvc">Service</label>
-        <select id="fSvc" name="service"><option>Signature wash</option><option>Decontamination &amp; correction</option><option>Protection</option></select>
+      <div class="field"><label for="fName" data-i18n="f.name">Name</label><input id="fName" name="name" autocomplete="name" required></div>
+      <div class="field"><label for="fCar" data-i18n="f.car">Car</label><input id="fCar" name="car" placeholder="Make, model, year" data-i18n-ph="f.car.ph" required></div>
+      <div class="field"><label for="fSvc" data-i18n="f.svc">Service</label>
+        <select id="fSvc" name="service"><option data-i18n="svc.1">Signature wash</option><option data-i18n="svc.2">Decontamination &amp; correction</option><option data-i18n="svc.3">Protection</option><option data-i18n="price.2">Interior detail</option></select>
       </div>
-      <div class="field"><label for="fDate">Preferred date</label><input id="fDate" name="date" type="date"></div>
-      <div class="field"><label for="fContact">Phone or email</label><input id="fContact" name="contact" autocomplete="tel" required></div>
+      <div class="field"><label for="fDate" data-i18n="f.date">Preferred date</label><input id="fDate" name="date" type="date"></div>
+      <div class="field"><label for="fContact" data-i18n="f.contact">Phone or email</label><input id="fContact" name="contact" autocomplete="tel" required></div>
       <button class="btn" type="submit" id="bookBtn">Request a slot</button>
       <p class="form__note mono" id="formNote" role="status">Online booking is not connected yet. Requests are not sent anywhere.</p>
     </form>
     <div class="contact" id="contact" hidden>
-      <p class="eyebrow mono">Find the bay</p>
+      <p class="eyebrow mono" data-i18n="contact.eyebrow">Contact</p>
       <dl class="contact__list" id="contactList"></dl>
     </div>
   </div>
@@ -216,16 +276,17 @@
   <div class="foot__inner">
     <div class="foot__col">
       <span class="foot__mark">AUTOLAB</span>
-      <p>All vehicle imagery on this page is real photography of one car, a black Bentley Continental&nbsp;GT (third generation), photographed during one detailing session. No AI-generated, 3D or composited vehicles. Where the wash bay is removed, the car's own pixels are untouched; the studio backdrop, ground shadow and smoke are page graphics.</p>
+      <p data-i18n="foot.about">All vehicle imagery on this page is real photography of one car.</p>
+      <p class="foot__credit" data-i18n="foot.credit">Design and development: Inna Babajanyan</p>
     </div>
     <div class="foot__col">
-      <p class="mono foot__h">Photography</p>
-      <p>Tima Miroshnichenko, via <a href="https://www.pexels.com/@tima-miroshnichenko/" rel="noopener" target="_blank">Pexels</a>, under the Pexels License. Full photo list in <a href="SOURCES.md" target="_blank">SOURCES.md</a>.</p>
-      <p class="mono foot__small">Photos 6872146 · 6872162 · 6872163 · 6872165 · 6872573 · 6872600 · 6872609 · 6873010 · 6873021 · 6873074 · 6873076 · 6873077 · 6873087 · 6873128 · 6873190 · 6873192</p>
+      <p class="mono foot__h" data-i18n="foot.photo.h">Photography</p>
+      <p data-i18n-html="foot.photo.p">Tima Miroshnichenko, via <a href="https://www.pexels.com/@tima-miroshnichenko/" rel="noopener" target="_blank">Pexels</a>, under the Pexels License.</p>
+      <p class="mono foot__small">Pexels · 6872146 · 6872162 · 6872163 · 6872165 · 6872573 · 6872600 · 6872609 · 6873010 · 6873021 · 6873074 · 6873076 · 6873077 · 6873087 · 6873128 · 6873190 · 6873192</p>
     </div>
     <div class="foot__col">
-      <p class="mono foot__h">Note</p>
-      <p>Bentley and Continental GT are trademarks of Bentley Motors Limited. AUTOLAB is a demonstration studio and is not affiliated with or endorsed by Bentley.</p>
+      <p class="mono foot__h" data-i18n="foot.note.h">Note</p>
+      <p data-i18n="foot.note.p">Bentley and Continental GT are trademarks of Bentley Motors Limited.</p>
     </div>
   </div>
 </footer>
@@ -234,6 +295,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 <script src="js/config.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/smoke.js"></script>
 <script src="js/main.js"></script>
 </body>

@@ -1,7 +1,8 @@
 # AUTOLAB — detailing studio site
 
 A scroll-driven site built entirely from real photographs of one car: a black Bentley Continental GT (third generation),
-photographed during one detailing session by Tima Miroshnichenko (Pexels). See `SOURCES.md` for every file, its
+photographed during one detailing session by Tima Miroshnichenko (Pexels).
+Design and development: Inna Babajanyan. See `SOURCES.md` for every file, its
 measured resolution, licence and what it is used for.
 
 The site uses photographs only: no video and no frame sequences. On the first screen the car (one cut-out still)
@@ -24,7 +25,7 @@ Then open http://localhost:8080. GSAP, ScrollTrigger and Lenis load from cdnjs/j
 | The car | light-bar slit mask opens onto the studio set, then crops to a panel | 6873074 |
 | Process (six stages) | pinned timeline, top-down light-bar wipes | 6873128, 6873077, 6872162, 6872146, 6873010, 6873192 |
 | Up close | clip-path masks | 6873190, 6873076, 6873021, 6872573 |
-| Services, booking | reveal on scroll | 6872609, 6873087, 6872600, 6872165 |
+| Services, prices, reviews, booking | reveal on scroll; booking via WhatsApp or email | 6872609, 6873087, 6872600, 6872165 |
 
 The fixed slate (bottom left) shows the Pexels photo number and the camera bearing of the frame on screen.
 
@@ -36,6 +37,17 @@ Needs the original downloads in `../autolab-raw/bentley/` (see `SOURCES.md` for 
 python3 tools/bentley_media.py      # cut-outs (WebP with alpha), originals, booking band
 python3 tools/make_sources.py       # regenerates SOURCES.md from the files on disk
 ```
+
+## Languages
+
+Armenian (default), English and Russian, switched in the header and remembered per visitor. All page text lives
+in `js/i18n.js`; elements point to it with `data-i18n` keys. To change a text, edit it there in all three languages.
+
+## Sample content
+
+This is a portfolio project. The price list and the three reviews are sample content written for it, and the page
+says so under each heading. Replace them with real prices and real client reviews before using the site for a
+real studio.
 
 ## Your studio details: `js/config.js`
 

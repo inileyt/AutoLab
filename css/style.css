@@ -10,15 +10,16 @@
   --line: rgba(228, 230, 227, .14);
   --bar: #ff2b2b;          /* tail-light red, used as light, never as fill */
   --bar-glow: rgba(255, 43, 43, .55);
-  --set-1: #4a4e55;        /* cyclorama under the key light */
-  --set-2: #2a2d32;
-  --set-3: #141619;
+  --set-1: #5a5e66;        /* cyclorama under the key light */
+  --set-2: #33363c;
+  --set-3: #17191c;
+  --set-glow: rgba(255, 43, 43, .2);  /* red rim light low behind the car */
   --floor-1: #1d1f23;
   --floor-2: #0b0c0e;
 
-  --f-display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-  --f-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --f-display: "Archivo", "Noto Sans Armenian", "Golos Text", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Archivo", "Noto Sans Armenian", "Golos Text", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", "Noto Sans Armenian", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   --t-xs: .72rem; --t-sm: .875rem; --t-md: 1.0625rem; --t-lg: 1.375rem;
   --t-xl: clamp(2rem, 4.6vw, 4.25rem);
@@ -81,9 +82,16 @@ a { color: inherit; }
 }
 .nav__mark { font-family: var(--f-display); font-weight: 800; font-variation-settings: "wdth" 125; letter-spacing: .3em; text-decoration: none; font-size: .95rem; }
 .nav__links { display: flex; gap: 22px; margin-left: auto; font-size: var(--t-sm); }
+.nav__links a { white-space: nowrap; }
 .nav__links a, .nav__cta { text-decoration: none; opacity: .86; }
 .nav__links a:hover, .nav__cta:hover { opacity: 1; }
-.nav__cta { font-size: var(--t-sm); border: 1px solid currentColor; padding: 7px 14px; }
+.nav__cta { font-size: var(--t-sm); border: 1px solid currentColor; padding: 7px 14px; white-space: nowrap; }
+.lang { display: flex; gap: 2px; font-size: .7rem; letter-spacing: .06em; }
+.lang button {
+  font: inherit; color: inherit; background: none; border: 0; padding: 6px 7px; cursor: pointer; opacity: .55;
+}
+.lang button:hover { opacity: .9; }
+.lang button[aria-pressed="true"] { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
 
 .slate {
   position: fixed; z-index: 40; left: calc(var(--gut-l) + var(--pad) - 16px);
@@ -97,13 +105,15 @@ a { color: inherit; }
 /* ---------- studio set (backdrop for the cut-out car photos) ---------- */
 .studio {
   background:
+    radial-gradient(46% 26% at 50% 66%, var(--set-glow), transparent 72%),
     radial-gradient(62% 58% at 50% 36%, var(--set-1) 0%, var(--set-2) 44%, var(--set-3) 78%, var(--bay) 100%);
 }
 .studio__floor {
   position: absolute; left: 0; right: 0; bottom: 0; height: 33%; pointer-events: none;
   background:
     linear-gradient(to bottom, rgba(255,255,255,.07), rgba(255,255,255,0) 3px),
-    radial-gradient(55% 120% at 50% 0%, rgba(150,156,164,.22), transparent 70%),
+    radial-gradient(40% 60% at 50% 0%, rgba(255,43,43,.1), transparent 70%),
+    radial-gradient(55% 120% at 50% 0%, rgba(150,156,164,.24), transparent 70%),
     linear-gradient(var(--floor-1), var(--floor-2));
 }
 
@@ -252,7 +262,30 @@ a { color: inherit; }
 .svc p { margin: 0; color: var(--steel); }
 .svc .svc__time { color: var(--bar); }
 
-/* ---------- 06 book ---------- */
+/* ---------- 06 prices ---------- */
+.prices, .reviews { padding-block: 12vh; border-top: 1px solid var(--line); }
+.prices__inner, .reviews__inner { padding-left: calc(var(--gut-l) + var(--pad) - 16px); padding-right: calc(var(--gut-r) + var(--pad) - 16px); }
+.prices__head, .reviews__head { margin-bottom: 5vh; max-width: 70ch; }
+.prices__note, .reviews__note { margin: 1rem 0 0; font-size: var(--t-xs); color: var(--steel); letter-spacing: .04em; }
+.table-wrap { overflow-x: auto; }
+.price-table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: var(--t-md); }
+.price-table th, .price-table td { text-align: left; padding: 16px 12px 16px 0; border-bottom: 1px solid var(--line); vertical-align: baseline; }
+.price-table thead th { font-size: var(--t-xs); font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--steel); }
+.price-table tbody th { font-weight: 600; font-family: var(--f-display); font-variation-settings: "wdth" 110; }
+.price-table td { color: var(--chalk); white-space: nowrap; }
+.price-table td:nth-child(2) { color: var(--steel); }
+.price-table tbody tr { transition: background .3s ease; }
+.price-table tbody tr:hover { background: rgba(255,255,255,.03); }
+
+/* ---------- 07 reviews ---------- */
+.review-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); }
+.review { margin: 0; padding: clamp(20px, 2.4vw, 32px); border: 1px solid var(--line); background: var(--bay-2); display: grid; gap: 1.4rem; align-content: space-between; }
+.review blockquote { margin: 0; font-size: var(--t-lg); line-height: 1.4; text-wrap: pretty; }
+.review blockquote::before { content: "“"; display: block; font-family: var(--f-display); font-size: 3rem; line-height: .6; color: var(--bar); margin-bottom: .6rem; }
+.review figcaption { font-size: var(--t-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--steel); }
+.review figcaption b { color: var(--chalk); font-weight: 500; }
+
+/* ---------- 08 book ---------- */
 .book { position: relative; min-height: 100vh; min-height: 100svh; display: grid; align-items: end; overflow: hidden; }
 .book__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .book__shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,12,14,.96) 18%, rgba(10,12,14,.55) 55%, rgba(10,12,14,.25)); }
@@ -295,12 +328,21 @@ a { color: inherit; }
 .foot__mark { display: block; margin-bottom: 1rem; color: var(--chalk); font-family: var(--f-display); font-weight: 800; font-variation-settings: "wdth" 125; letter-spacing: .3em; }
 .foot__h { color: var(--chalk); font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .12em; }
 .foot__small { font-size: .7rem; line-height: 1.7; overflow-wrap: anywhere; }
+.foot__credit { color: var(--chalk); }
 
 /* ---------- responsive ---------- */
+@media (max-width: 1180px) {
+  .nav__links { gap: 16px; }
+}
+@media (max-width: 1040px) and (min-width: 821px) {
+  .nav__links a:nth-child(2) { display: none; }
+}
 @media (max-width: 820px) {
   :root { --nav-h: 56px; }
   .nav__links { display: none; }
-  .nav__cta { margin-left: auto; }
+  .lang { margin-left: auto; }
+  .lang button { padding: 6px 5px; }
+  .nav__cta { padding: 6px 10px; font-size: .78rem; }
   .slate { gap: 12px; font-size: .6rem; }
   .hero__copy { top: calc(var(--nav-h) + 9vh); }
   .car { --cw: 100vw; bottom: 25%; }
@@ -331,6 +373,19 @@ a { color: inherit; }
   .mc--b { width: 72%; justify-self: end; }
 
   .svc { grid-template-columns: 1fr; }
+  .review-list { grid-template-columns: 1fr; }
+  .hero__word { font-size: 13.4vw; }
+  .steps li span[data-i18n] { display: none; }
+  .steps li { align-items: center; font-size: .8rem; }
+  .steps li span { width: auto; }
+  /* price list: one card per service, labels from the table head */
+  .price-table { min-width: 0; }
+  .price-table thead { display: none; }
+  .price-table tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 12px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .price-table th, .price-table td { border: 0; padding: 0; white-space: normal; }
+  .price-table tbody th { grid-column: 1 / -1; font-size: var(--t-md); }
+  .price-table td::before { content: attr(data-label); display: block; font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--steel); margin-bottom: 2px; }
+  .price-table td[colspan] { grid-column: span 2; }
   .form { grid-template-columns: 1fr; }
   .foot__inner { grid-template-columns: 1fr; }
 }

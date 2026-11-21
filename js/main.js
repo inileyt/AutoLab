@@ -21,11 +21,17 @@
   }
 
   /* ---------------------------------------------------------------- slate */
+  const I18N = window.AUTOLAB_I18N || { t: (k) => k, lang: "en" };
+  const t = (k, v) => I18N.t(k, v);
   const slate = { photo: $("#slReel"), cam: $("#slCam") };
+  let slateNow = ["6872163", "cam.hero"];
+  // photo is a Pexels number or a text key; cam is a text key
   function setSlate(photo, cam) {
-    photo = String(photo);
-    if (slate.photo.textContent !== photo) slate.photo.textContent = photo;
-    if (slate.cam.textContent !== cam) slate.cam.textContent = cam;
+    slateNow = [photo, cam];
+    const ph = /^\d+$/.test(photo) ? photo : t(photo), c = t(cam);
+    if (slate.photo.textContent !== ph) slate.photo.textContent = ph;
+    if (slate.cam.textContent !== c) slate.cam.textContent = c;
+    slate.cam.removeAttribute("data-i18n");
   }
 
   /* ---------------------------------------------------------------- init */
@@ -135,7 +141,7 @@
           leaving = st.direction > 0 && p > EXIT_AT;
           lastP = p;
         },
-        onEnterBack: () => setSlate("6872163", "30° front right"),
+        onEnterBack: () => setSlate("6872163", "cam.hero"),
       },
     });
     if (!reduceMotion) {
@@ -158,8 +164,8 @@
       defaults: { ease: "none" },
       scrollTrigger: {
         trigger: ".subject", start: "top top", end: "+=170%", scrub: 0.6, pin: true, anticipatePin: 1,
-        onEnter: () => setSlate("6873074", "0° head-on"),
-        onEnterBack: () => setSlate("6873074", "0° head-on"),
+        onEnter: () => setSlate("6873074", "cam.headon"),
+        onEnterBack: () => setSlate("6873074", "cam.headon"),
       },
     });
     subTl
@@ -230,7 +236,7 @@
       });
     });
     ScrollTrigger.create({ trigger: ".macro", start: "top center", end: "bottom center",
-      onToggle: (st) => st.isActive && setSlate("Macro set", "20 cm") });
+      onToggle: (st) => st.isActive && setSlate("slate.macro", "cam.macro") });
 
     /* ---------- 05 SERVICES ---------- */
     $$(".svc").forEach((svc) => {
@@ -242,11 +248,11 @@
         scrollTrigger: { trigger: svc, start: "top bottom", end: "bottom top", scrub: true } });
     });
     ScrollTrigger.create({ trigger: ".services", start: "top center", end: "bottom center",
-      onToggle: (st) => st.isActive && setSlate("Bay 01 set", "Various") });
+      onToggle: (st) => st.isActive && setSlate("slate.bay", "cam.various") });
 
     /* ---------- 06 BOOK ---------- */
     ScrollTrigger.create({ trigger: ".book", start: "top 70%", end: "bottom top",
-      onToggle: (st) => st.isActive && setSlate("6872165", "Rear, tail light") });
+      onToggle: (st) => st.isActive && setSlate("6872165", "cam.book") });
     gsap.fromTo(".book__bg", { scale: 1.03 }, { scale: 1, ease: "none",
       scrollTrigger: { trigger: ".book", start: "top bottom", end: "bottom bottom", scrub: true } });
     gsap.from(".book .display", { yPercent: 60, opacity: 0, duration: 1.3, ease: "expo.out",
@@ -264,18 +270,24 @@
     const link = (href, text) => `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(text)}</a>`;
 
     // only filled-in fields are shown; nothing is invented
-    const rows = [];
-    if (val("phone")) rows.push(["Phone", `<a href="tel:${esc(val("phone").replace(/[^\d+]/g, ""))}">${esc(val("phone"))}</a>`]);
-    if (val("whatsapp")) rows.push(["WhatsApp", link(`https://wa.me/${digits(val("whatsapp"))}`, "+" + digits(val("whatsapp")))]);
-    if (val("telegram")) rows.push(["Telegram", link(`https://t.me/${val("telegram").replace(/^@/, "")}`, "@" + val("telegram").replace(/^@/, ""))]);
-    if (val("email")) rows.push(["Email", `<a href="mailto:${esc(val("email"))}">${esc(val("email"))}</a>`]);
-    if (val("address")) rows.push(["Address", esc(val("address")) + (val("mapUrl") ? "<br>" + link(val("mapUrl"), "Open map") : "")]);
-    else if (val("mapUrl")) rows.push(["Map", link(val("mapUrl"), "Open map")]);
-    if (val("hours")) rows.push(["Hours", esc(val("hours"))]);
-    if (val("instagram")) rows.push(["Instagram", link(`https://instagram.com/${val("instagram").replace(/^@/, "")}`, "@" + val("instagram").replace(/^@/, ""))]);
-    if (rows.length) {
-      $("#contactList").innerHTML = rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
-      $("#contact").hidden = false;
+    const tg = val("telegram").replace(/^@/, "");
+    const tgIsPhone = /^\+?\d[\d\s-]{6,}$/.test(tg);
+    function renderContacts() {
+      const rows = [];
+      if (val("phone")) rows.push(["c.phone", `<a href="tel:${esc(val("phone").replace(/[^\d+]/g, ""))}">${esc(val("phone"))}</a>`]);
+      if (val("whatsapp")) rows.push(["c.whatsapp", link(`https://wa.me/${digits(val("whatsapp"))}`, val("phone") && digits(val("phone")) === digits(val("whatsapp")) ? val("phone") : "+" + digits(val("whatsapp")))]);
+      if (tg) rows.push(["c.telegram", tgIsPhone
+        ? link(`https://t.me/+${digits(tg)}`, val("phone") && digits(val("phone")) === digits(tg) ? val("phone") : "+" + digits(tg))
+        : link(`https://t.me/${tg}`, "@" + tg)]);
+      if (val("email")) rows.push(["c.email", `<a href="mailto:${esc(val("email"))}">${esc(val("email"))}</a>`]);
+      if (val("address")) rows.push(["c.address", esc(val("address")) + (val("mapUrl") ? "<br>" + link(val("mapUrl"), t("c.map")) : "")]);
+      else if (val("mapUrl")) rows.push(["c.address", link(val("mapUrl"), t("c.map"))]);
+      if (val("hours")) rows.push(["c.hours", esc(val("hours"))]);
+      if (val("instagram")) rows.push(["c.instagram", link(`https://instagram.com/${val("instagram").replace(/^@/, "")}`, "@" + val("instagram").replace(/^@/, ""))]);
+      if (rows.length) {
+        $("#contactList").innerHTML = rows.map(([k, v]) => `<div><dt>${esc(t(k))}</dt><dd>${v}</dd></div>`).join("");
+        $("#contact").hidden = false;
+      }
     }
 
     // where a booking request goes: a form service, else WhatsApp, else email, else nowhere (and we say so)
@@ -283,14 +295,16 @@
     const form = $("#bookForm"), note = $("#formNote"), btn = $("#bookBtn");
     const dateIn = $("#fDate");
     try { dateIn.min = new Date().toISOString().slice(0, 10); } catch (e) { /* older browsers: no minimum */ }
-    note.textContent = {
-      endpoint: "Your request goes straight to the studio. We reply to confirm the time.",
-      whatsapp: "Sending opens WhatsApp with your request filled in. Press send there to book.",
-      email: "Sending opens your email app with your request filled in. Press send there to book.",
-      none: "Online booking is not connected yet. Requests are not sent anywhere.",
-    }[channel];
-    if (channel === "whatsapp") btn.textContent = "Send via WhatsApp";
-    if (channel === "email") btn.textContent = "Send by email";
+    let noteState = ["intro"];
+    function renderNote() {
+      const [kind, a] = noteState;
+      if (kind === "intro") note.textContent = t({ endpoint: "note.endpoint", whatsapp: "note.wa", email: "note.email", none: "note.none" }[channel]);
+      else if (kind === "ready") note.innerHTML = esc(t("note.ready", { app: t(channel === "whatsapp" ? "app.wa" : "app.email") }))
+        .replace("&lt;a&gt;", `<a href="${esc(a)}" target="_blank" rel="noopener">`).replace("&lt;/a&gt;", "</a>");
+      else note.textContent = t(kind, a ? { name: a } : undefined);
+      btn.textContent = t(channel === "whatsapp" ? "btn.wa" : channel === "email" ? "btn.email" : "btn.request");
+    }
+    const say = (kind, a) => { noteState = [kind, a]; renderNote(); };
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -300,36 +314,38 @@
         i.setAttribute("aria-invalid", bad ? "true" : "false");
         if (bad) ok = false;
       });
-      if (!ok) { note.textContent = "Fill in your name, car and a way to reach you."; return; }
+      if (!ok) { say("note.invalid"); return; }
       const d = Object.fromEntries(new FormData(form));
       const name = String(d.name).trim();
-      const text = ["AUTOLAB booking request", `Name: ${name}`, `Car: ${d.car}`, `Service: ${d.service}`,
-        `Preferred date: ${d.date || "any"}`, `Contact: ${d.contact}`].join("\n");
+      const text = [t("msg.title"), `${t("msg.name")}: ${name}`, `${t("msg.car")}: ${d.car}`, `${t("msg.svc")}: ${d.service}`,
+        `${t("msg.date")}: ${d.date || t("msg.any")}`, `${t("msg.contact")}: ${d.contact}`].join("\n");
 
       if (channel === "endpoint") {
-        btn.disabled = true; note.textContent = "Sending…";
+        btn.disabled = true; say("note.sending");
         try {
           const r = await fetch(val("formEndpoint"), { method: "POST", headers: { Accept: "application/json" }, body: new FormData(form) });
           if (!r.ok) throw new Error(r.status);
-          note.textContent = `Thanks, ${name}. Your request reached the studio; we will contact you to confirm the time.`;
+          say("note.sent", name);
           form.reset();
         } catch (err) {
-          note.textContent = "The request could not be sent. Please try again, or contact the studio directly.";
+          say("note.failed");
         } finally { btn.disabled = false; }
         return;
       }
-      if (channel === "none") {
-        note.textContent = `Thanks, ${name}. Online booking is not connected yet, so this request was not sent anywhere.`;
-        return;
-      }
+      if (channel === "none") { say("note.noneAfter", name); return; }
       const url = channel === "whatsapp"
         ? `https://wa.me/${digits(val("whatsapp"))}?text=${encodeURIComponent(text)}`
-        : `mailto:${val("email")}?subject=${encodeURIComponent("Booking request: " + d.service)}&body=${encodeURIComponent(text)}`;
+        : `mailto:${val("email")}?subject=${encodeURIComponent(t("msg.subject") + ": " + d.service)}&body=${encodeURIComponent(text)}`;
       // the visitor still has to press send in WhatsApp or their mail app, so the page never claims it was sent
-      note.innerHTML = `Your request is ready. If ${channel === "whatsapp" ? "WhatsApp" : "your email app"} did not open, `
-        + `<a href="${esc(url)}" target="_blank" rel="noopener">open it here</a>, then press send.`;
+      say("ready", url);
       if (channel === "whatsapp") window.open(url, "_blank", "noopener");
       else window.location.href = url;
+    });
+
+    renderContacts(); renderNote();
+    document.addEventListener("autolab:lang", () => {
+      renderContacts(); renderNote(); setSlate(...slateNow);
+      ScrollTrigger.refresh();
     });
 
     window.addEventListener("load", () => ScrollTrigger.refresh());
