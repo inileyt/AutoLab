@@ -25,6 +25,7 @@ Then open http://localhost:8080. GSAP, ScrollTrigger and Lenis load from cdnjs/j
 | The car | light-bar slit mask opens onto the studio set, then crops to a panel | 6873074 |
 | Process (six stages) | pinned timeline, top-down light-bar wipes | 6873128, 6873077, 6872162, 6872146, 6873010, 6873192 |
 | Up close | clip-path masks | 6873190, 6873076, 6873021, 6872573 |
+| Interior (a second car of the same model, labelled) | clip-path masks | 11968580, 11968578, 11968575, 11968579, 11968572, 11968576 (Amit Suri) |
 | Services, prices, reviews, booking | reveal on scroll; booking via WhatsApp or email | 6872609, 6873087, 6872600, 6872165 |
 
 The fixed slate (bottom left) shows the Pexels photo number and the camera bearing of the frame on screen.

@@ -5,13 +5,15 @@ from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(os.path.dirname(ROOT), "autolab-raw", "bentley")
+RAW_INT = os.path.join(os.path.dirname(ROOT), "autolab-raw", "interior")
 html = open(os.path.join(ROOT, "index.html")).read()
-used = sorted(set(re.findall(r"media/img/(\d{7})", html)))
+used = sorted(set(re.findall(r"media/img/(\d{7})[-.]", html)))
+interior = sorted(set(re.findall(r"media/img/(\d{8})[-.]", html)))
 cut = set(re.findall(r"media/img/(\d{7})-alpha", html))
 band = set(re.findall(r"media/img/(\d{7})-band", html))
 
 L = ["# AUTOLAB media sources", "",
- "Every image on the site is a real photograph from one session of one car:",
+ "Every image on the site is a real photograph. All exterior and wash photos come from one session of one car:",
  "a black **Bentley Continental GT (third generation, 2018 on)** in a detailing bay.",
  "Pexels titles photos from this session \"A Bentley Continental GT at a Car Wash\"; the generation is identified",
  "visually (matrix grille, round LED headlights with cut-crystal pattern, oval tail lights).", "",
@@ -38,10 +40,24 @@ for sid in used:
     w, h = Image.open(os.path.join(RAW, f"{sid}.jpg")).size
     how = "masked (car only)" if sid in cut else ("16:9 crop" if sid in band else "original framing")
     L.append(f"| {sid} | {w}×{h} JPEG | {how} | https://www.pexels.com/photo/{sid}/ | https://images.pexels.com/photos/{sid}/pexels-photo-{sid}.jpeg |")
-L += ["", "## Downloaded but not used", "",
+L += ["", "## Interior section: a second car (different photographer)", "",
+ "The black car above was not photographed inside; the session's cabin photos show the Porsche 911 that shared the bay.",
+ "The interior section therefore uses photos of a **different car of the same model**: a second-generation",
+ "**Bentley Continental GT (2011–2018)** with red diamond-quilted hide, right-hand drive. The page says this in",
+ "all three languages, directly under the section heading.", "",
+ "- **Creator:** Amit Suri (name and copyright in the files' EXIF) — via Pexels",
+ "- **License:** [Pexels License](https://www.pexels.com/license/), as above. Original framing, downscaled only.", "",
+ "| Pexels ID | Original | Page | Direct file |", "|---|---|---|---|"]
+for sid in interior:
+    w, h = Image.open(os.path.join(RAW_INT, f"{sid}.jpg")).size
+    L.append(f"| {sid} | {w}×{h} JPEG | https://www.pexels.com/photo/{sid}/ | https://images.pexels.com/photos/{sid}/pexels-photo-{sid}.jpeg |")
+L += ["",
+ "## Downloaded but not used", "",
  "- 6873097 and other wide shots with a detailer beside the car: segmentation lost the car or kept the person.",
  "- 6872147, 6872175, 6873008, 6873133 show the grey Porsche 911 that shared the bay, not the Bentley.",
  "- 6873106 and 6873143 are unrelated photos that sit in the same ID range.",
+ "- The session's cabin photos (6872139, 6872142, 6872585, 6873102, 6873103) show the Porsche 911's interior",
+ "  (Porsche steering wheel, PCM buttons, Sport Chrono clock), so they are not used for the Bentley.",
  "- An earlier version of this site used the Porsche 911 from the same session; it was replaced at the client's",
  "  request (not a Porsche, not a white or grey car).", "",
  "## What is not in the source material", "",

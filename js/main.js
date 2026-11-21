@@ -241,6 +241,15 @@
     ScrollTrigger.create({ trigger: ".macro", start: "top center", end: "bottom center",
       onToggle: (st) => st.isActive && setSlate("slate.macro", "cam.macro") });
 
+    /* ---------- 04b INTERIOR: masks open as each frame arrives ---------- */
+    $$(".ic").forEach((ic) => {
+      gsap.timeline({ scrollTrigger: { trigger: ic, start: "top 92%", end: "top 40%", scrub: true } })
+        .fromTo($(".ic__img", ic), { clipPath: "inset(10% 10% 10% 10%)" }, { clipPath: "inset(0% 0% 0% 0%)", ease: "power2.out" }, 0)
+        .fromTo($("img", ic), { scale: 1.06 }, { scale: 1, ease: "power2.out" }, 0);
+    });
+    ScrollTrigger.create({ trigger: ".interior", start: "top center", end: "bottom center",
+      onToggle: (st) => st.isActive && setSlate("slate.interior", "cam.interior") });
+
     /* ---------- 05 SERVICES ---------- */
     $$(".svc").forEach((svc) => {
       gsap.from(svc.children, {

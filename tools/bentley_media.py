@@ -13,6 +13,9 @@ from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(os.path.dirname(ROOT), "autolab-raw", "bentley")
+# interior: a second car of the same model (2nd-gen Continental GT, Amit Suri on Pexels), shown as such on the page
+RAW_INT = os.path.join(os.path.dirname(ROOT), "autolab-raw", "interior")
+INTERIOR = ["11968580", "11968578", "11968575", "11968579", "11968572", "11968576"]
 OUT = os.path.join(ROOT, "media", "img")
 sys.path.insert(0, os.path.join(ROOT, "tools"))
 import cutout as C  # noqa: E402
@@ -55,6 +58,12 @@ def do_orig(sid):
     print("orig", sid, flush=True)
 
 
+def do_interior(sid):
+    im = Image.open(os.path.join(RAW_INT, f"{sid}.jpg")).convert("RGB")
+    save(im, sid)
+    print("interior", sid, flush=True)
+
+
 def do_band():
     im = Image.open(os.path.join(RAW, "6872165.jpg")).convert("RGB")
     W, H = im.size; ch = round(W * 9 / 16); y0 = max(0, (H - ch) // 2)
@@ -63,9 +72,11 @@ def do_band():
 
 
 if __name__ == "__main__":
-    what = sys.argv[1:] or ["cut", "orig", "band"]
+    what = sys.argv[1:] or ["cut", "orig", "band", "interior"]
     if "cut" in what:
         for s in CUT: do_cut(s)
     if "orig" in what:
         for s in ORIG: do_orig(s)
     if "band" in what: do_band()
+    if "interior" in what:
+        for s in INTERIOR: do_interior(s)
