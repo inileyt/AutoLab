@@ -1,0 +1,6 @@
+# build output for the claude.ai artifact host
+dist-artifact/
+_frames_test.html
+__pycache__/
+*.pyc
+.DS_Store
