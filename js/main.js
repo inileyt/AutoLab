@@ -87,7 +87,7 @@
           smoke.emit(px, py, {
             n: 1, vx: -dir * (50 + speed * 0.1), vy: -22, spread: 70,
             size: r.width * (leaving ? (i === 0 ? 0.065 : 0.05) : (i === 0 ? 0.05 : 0.04)),
-            life: leaving ? 2.6 : 2, alpha: leaving ? .26 : .14,
+            life: leaving ? 1.5 : 1.3, alpha: leaving ? .26 : .14,
           });
         });
       }
@@ -100,7 +100,7 @@
       const { r, pts } = emitPoints();
       pts.forEach(([px, py], i) => smoke.emit(px, py, {
         n: Math.round((i === 0 ? 9 : 6) * strength), vx: -170, vy: -30, spread: 150,
-        size: r.width * (i === 0 ? 0.075 : 0.06), life: 2.8, alpha: .28,
+        size: r.width * (i === 0 ? 0.075 : 0.06), life: 1.7, alpha: .28,
       }));
     }
 
@@ -139,6 +139,8 @@
           const p = st.progress;
           if (lastP < EXIT_AT + .01 && p >= EXIT_AT + .01 && st.direction > 0) burnout(1);
           leaving = st.direction > 0 && p > EXIT_AT;
+          // once the car has left the set, the smoke goes with it: nothing lingers over the next section
+          if (p > EXIT_AT + .6 && smoke && smoke.active) smoke.clear();
           lastP = p;
         },
         onEnterBack: () => setSlate("6872163", "cam.hero"),
@@ -149,6 +151,7 @@
         .to(".hero__copy .eyebrow, .hero__foot", { opacity: 0, y: -20, duration: .1 }, .02)
         .to(car, { x: () => window.innerWidth * 0.5 + car.offsetWidth * 1.05, duration: .5, ease: "power2.in" }, EXIT_AT)
         .to("#heroWord", { letterSpacing: "0.1em", duration: .35, ease: "power1.inOut" }, .5)
+        .fromTo("#smoke", { opacity: 1 }, { opacity: 0, duration: .12, ease: "power1.in" }, EXIT_AT + .42)
         .to("#heroWord", { opacity: 0, yPercent: -20, duration: .18, ease: "power1.in" }, .8)
         .to({}, { duration: .04 });
     }

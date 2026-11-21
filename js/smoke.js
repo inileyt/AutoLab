@@ -27,7 +27,7 @@
   }
 
   class Smoke {
-    constructor(canvas, { max = 240 } = {}) {
+    constructor(canvas, { max = 140 } = {}) {
       this.canvas = canvas;
       this.ctx = canvas.getContext("2d");
       this.max = max;
