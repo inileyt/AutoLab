@@ -177,9 +177,13 @@ a { color: inherit; }
 .subject__media::after { content: ""; position: absolute; inset: 0; opacity: 0; background: linear-gradient(to top, rgba(10,12,14,.92) 22%, transparent 62%); }
 .subject__copy {
   position: absolute; z-index: 2; right: calc(var(--gut-r) + var(--pad) - 16px); top: 50%; transform: translateY(-50%);
-  width: min(460px, 38vw); display: grid; gap: 1.6rem;
+  width: min(600px, 36vw); display: grid; gap: 1.6rem;
+  /* one column that never grows past its box; the heading sizes itself to this box */
+  grid-template-columns: minmax(0, 1fr); container-type: inline-size;
 }
-.subject__name { font-size: clamp(2rem, 3.7vw, 3.8rem); }
+.subject__name { font-size: clamp(1.6rem, 3.2vw, 3.6rem); }
+/* "CONTINENTAL" in the wide cut is about 9.3 em: 10% of the column keeps it inside with room to spare */
+@supports (font-size: 1cqi) { .subject__name { font-size: min(3.6rem, 10cqi); } }
 .subject__name span { display: block; color: var(--bar); text-shadow: 0 0 24px var(--bar-glow); }
 .spec { margin: 0; display: grid; border-top: 1px solid var(--line); font-size: var(--t-sm); }
 .spec div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
