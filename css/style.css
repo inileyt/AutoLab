@@ -33,6 +33,10 @@
 }
 
 * { box-sizing: border-box; }
+/* show each face's real weights; never a browser-thickened fake bold */
+html { font-synthesis-weight: none; }
+/* Armenian small labels read smaller than Latin at the same size */
+html[lang="hy"] { --t-xs: .8rem; }
 html { background: var(--bay); }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -210,6 +214,9 @@ a { color: inherit; }
 }
 .steps li span { font-size: var(--t-xs); font-weight: 500; color: var(--steel); width: 22px; }
 .steps li.is-on { color: var(--chalk); transform: translateX(6px); }
+.steps li { cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+.steps li:hover { color: var(--chalk); }
+.steps li:focus-visible { outline: 1px solid var(--bar); outline-offset: 4px; }
 .steps li.is-on span { color: var(--bar); }
 .rail__meter { height: 2px; background: var(--line); }
 .rail__meter i { display: block; height: 100%; background: var(--bar); box-shadow: 0 0 10px var(--bar-glow); transform-origin: left; transform: scaleX(0); }

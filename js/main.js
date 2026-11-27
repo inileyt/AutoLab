@@ -186,46 +186,55 @@
     }
     subTl.to({}, { duration: .12 });
 
-    /* ---------- 03 PROCESS ---------- */
+    /* ---------- 03 PROCESS: plays by itself, one stage every 4 seconds ---------- */
     const layers = $$(".layer"), steps = $$("#steps li"), caps = $$(".cap");
     const wipe = $("#wipe"), railFill = $("#railFill");
-    const N = layers.length;
-    let active = -1;
-    function setActive(k) {
-      if (k === active) return;
-      active = k;
-      steps.forEach((li, i) => li.classList.toggle("is-on", i === k));
+    const N = layers.length, STEP_MS = 4000;
+    let active = 0, z = 1, elapsed = 0, inView = false, held = false, last = 0;
+
+    layers.forEach((l, i) => gsap.set(l, { clipPath: i === 0 ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 100% 0%)", zIndex: i === 0 ? 1 : 0 }));
+    steps.forEach((li, i) => {
+      li.tabIndex = 0; li.setAttribute("role", "button");
+      const pick = () => { go(i); elapsed = 0; };
+      li.addEventListener("click", pick);
+      li.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
+    });
+
+    function mark(k) {
+      steps.forEach((li, i) => { li.classList.toggle("is-on", i === k); li.setAttribute("aria-pressed", String(i === k)); });
       caps.forEach((c, i) => c.classList.toggle("is-on", i === k));
+      if (inView) setSlate(layers[k].dataset.reel, layers[k].dataset.cam);
     }
-    const procTl = gsap.timeline({
-      defaults: { ease: "none" },
-      scrollTrigger: {
-        trigger: ".process", start: "top top", end: () => "+=" + (N * 125) + "%", scrub: 0.6, pin: true, anticipatePin: 1,
-        onUpdate: (st) => {
-          const t = st.progress * N;
-          const k = Math.min(N - 1, Math.max(0, Math.floor(t + 0.12)));
-          setActive(k);
-          railFill.style.transform = `scaleX(${st.progress})`;
-          setSlate(layers[k].dataset.reel, layers[k].dataset.cam);
-        },
-        onLeaveBack: () => { active = -1; },
-        onEnterBack: () => { active = -1; },
-      },
-    });
-    layers.forEach((l, k) => {
-      const kb = $(".kb", l);
-      if (kb) procTl.fromTo(kb, { scale: 1.04 }, { scale: 1.0, duration: 1.4 }, Math.max(0, k - .35));
-    });
-    for (let k = 1; k < N; k++) {
-      const at = k - .38;
-      procTl
-        .fromTo(layers[k], { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: .38, ease: "power2.inOut" }, at)
-        .fromTo(wipe, { top: "0%", opacity: 1 }, { top: "100%", duration: .38, ease: "power2.inOut", immediateRender: false }, at)
-        .to(wipe, { opacity: 0, duration: .04 }, at + .38)
-        .to(layers[k - 1], { opacity: .5, duration: .38, ease: "power2.in" }, at)
-        .set(layers[k - 1], { opacity: 1 }, at + .4);
+    // the next stage is wiped in from the top behind a light bar; the photo settles over its 4 seconds
+    function go(k) {
+      if (k === active) return;
+      const layer = layers[k], kb = $(".kb", layer);
+      gsap.killTweensOf([layer, wipe]);
+      layer.style.zIndex = ++z;
+      active = k; mark(k);
+      if (reduceMotion) { gsap.set(layer, { clipPath: "inset(0% 0% 0% 0%)" }); return; }
+      gsap.fromTo(layer, { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: .9, ease: "power2.inOut" });
+      gsap.fromTo(wipe, { top: "0%", opacity: 1 }, { top: "100%", duration: .9, ease: "power2.inOut",
+        onComplete: () => gsap.set(wipe, { opacity: 0 }) });
+      if (kb) gsap.fromTo(kb, { scale: 1.04 }, { scale: 1, duration: STEP_MS / 1000 + .5, ease: "none" });
     }
-    procTl.to({}, { duration: N - procTl.duration() > 0 ? N - procTl.duration() : .01 });
+    mark(0);
+
+    // the clock only runs while the section is on screen, the tab is visible and the mouse is not resting on the photo
+    ScrollTrigger.create({ trigger: ".process", start: "top 60%", end: "bottom 40%",
+      onToggle: (st) => { inView = st.isActive; if (inView) setSlate(layers[active].dataset.reel, layers[active].dataset.cam); } });
+    document.addEventListener("visibilitychange", () => { last = 0; });
+    const screenEl = $("#screen");
+    screenEl.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") held = true; });
+    screenEl.addEventListener("pointerleave", () => { held = false; });
+    gsap.ticker.add((time) => {
+      const now = time * 1000, dt = last ? Math.min(now - last, 100) : 0;
+      last = now;
+      if (!inView || held || document.hidden || reduceMotion) return;
+      elapsed += dt;
+      if (elapsed >= STEP_MS) { elapsed = 0; go((active + 1) % N); }
+      railFill.style.transform = `scaleX(${(active + elapsed / STEP_MS) / N})`;
+    });
 
     /* ---------- 04 MACRO: masks open, frames drift ---------- */
     $$(".mc").forEach((mc) => {
