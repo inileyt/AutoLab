@@ -129,6 +129,11 @@
 
     // scroll: the car pulls away to the right and leaves its smoke behind
     const EXIT_AT = .16;
+    const countEls = $$(".hero__stats dd"), heroCount = { k: 0 };
+    const drawCounts = () => countEls.forEach((dd) => {
+      const v = Math.round(+dd.dataset.to * heroCount.k);
+      dd.textContent = String(v).padStart(+dd.dataset.pad || 1, "0") + (dd.dataset.suffix || "");
+    });
     let lastP = 0;
     const heroTl = gsap.timeline({
       defaults: { ease: "none" },
@@ -150,10 +155,15 @@
       heroTl
         .to(".hero__copy .eyebrow, .hero__foot", { opacity: 0, y: -20, duration: .1 }, .02)
         .to(car, { x: () => window.innerWidth * 0.5 + car.offsetWidth * 1.05, duration: .5, ease: "power2.in" }, EXIT_AT)
-        .to("#heroWord", { letterSpacing: "0.1em", duration: .35, ease: "power1.inOut" }, .5)
+        .to("#heroWord", { letterSpacing: "0.1em", duration: .3, ease: "power1.inOut" }, .3)
         .fromTo("#smoke", { opacity: 1 }, { opacity: 0, duration: .12, ease: "power1.in" }, EXIT_AT + .42)
-        .to("#heroWord", { opacity: 0, yPercent: -20, duration: .18, ease: "power1.in" }, .8)
-        .to({}, { duration: .04 });
+        .to("#heroWord", { opacity: 0, yPercent: -20, duration: .12, ease: "power1.in" }, .5)
+        // the empty set gets a claim and three numbers instead of staying blank
+        .set("#heroAfter", { autoAlpha: 1 }, .58)
+        .fromTo("#heroAfter .hci", { yPercent: 115 }, { yPercent: 0, duration: .14, stagger: .07, ease: "power3.out" }, .6)
+        .fromTo(".hero__stats", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .12, ease: "power2.out" }, .76)
+        .fromTo(heroCount, { k: 0 }, { k: 1, duration: .16, ease: "power2.out", onUpdate: drawCounts }, .78)
+        .to({}, { duration: .08 });
     }
     // smoke only runs while the hero is on screen (pinned, or scrolling away)
     gsap.ticker.add(() => {
