@@ -48,10 +48,10 @@ in `js/i18n.js`; elements point to it with `data-i18n` keys. To change a text, e
 ## Fonts
 
 - Latin: Archivo; Cyrillic: Golos Text; labels: IBM Plex Mono (Google Fonts).
-- Armenian: **ERKN** by Tzu-yuan Yin (2013), supplied by the site owner, served from `media/fonts/erkn.woff2`
-  for the Armenian range only (U+0530–058F). The original OTF's CFF outlines fail browser font validation
-  ("Failed validating CharStrings INDEX"), so the web file is the same design with its outlines converted to
-  TrueType. ERKN has no dram sign (֏); that one character falls back to Noto Sans Armenian.
+- Armenian: **Arm Hmk's Bebas Neue** (Armenian by Hamik Mayilyan, Latin by Ryoichi Tsunekawa, 2011), supplied
+  by the site owner, served from `media/fonts/arm-bebas-neue.woff2` for the Armenian range only (U+0530–058F).
+  It is all capitals and condensed, so Armenian text is set one step larger. It has no dram sign (֏) or Armenian
+  question mark (՞); those fall back to Noto Sans Armenian.
 
 ## Sample content
 

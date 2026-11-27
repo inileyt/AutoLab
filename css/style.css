@@ -3,10 +3,12 @@
    in the margins like slate notes; its red tail light is the one accent.
    Deliberately single-theme. */
 @font-face {
-  font-family: "ERKN";
-  src: url("../media/fonts/erkn.woff2") format("woff2");
+  font-family: "Arm Bebas Neue";
+  src: url("../media/fonts/arm-bebas-neue.woff2") format("woff2");
   font-weight: 400; font-style: normal; font-display: swap;
   unicode-range: U+0530-058F, U+FB13-FB17;
+  /* all-caps and condensed: draw its letters 22% larger so they match the cap height of the Latin text */
+  size-adjust: 122%;
 }
 :root {
   --bay: #0a0c0e;          /* wash-bay darkness, blue-black */
@@ -23,11 +25,11 @@
   --floor-1: #1d1f23;
   --floor-2: #0b0c0e;
 
-  /* Armenian letters come from ERKN (it only covers U+0530–058F); anything it lacks, such as the dram sign ֏,
-     falls through to Noto Sans Armenian. Latin stays Archivo, Cyrillic Golos Text. */
-  --f-display: "Archivo", "ERKN", "Noto Sans Armenian", "Golos Text", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-  --f-body: "Archivo", "ERKN", "Noto Sans Armenian", "Golos Text", "Helvetica Neue", Arial, sans-serif;
-  --f-mono: "IBM Plex Mono", "ERKN", "Noto Sans Armenian", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  /* Armenian letters come from Arm Hmk's Bebas Neue (only for U+0530–058F); anything it lacks, such as the
+     dram sign ֏ and the question mark ՞, falls through to Noto Sans Armenian. Latin stays Archivo, Cyrillic Golos Text. */
+  --f-display: "Archivo", "Arm Bebas Neue", "Noto Sans Armenian", "Golos Text", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Archivo", "Arm Bebas Neue", "Noto Sans Armenian", "Golos Text", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", "Arm Bebas Neue", "Noto Sans Armenian", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   --t-xs: .72rem; --t-sm: .875rem; --t-md: 1.0625rem; --t-lg: 1.375rem;
   --t-xl: clamp(2rem, 4.6vw, 4.25rem);
@@ -41,10 +43,13 @@
 }
 
 * { box-sizing: border-box; }
-/* ERKN has one weight: show it as drawn instead of a browser-thickened fake bold */
+/* the Armenian face has one weight: show it as drawn instead of a browser-thickened fake bold */
 html { font-synthesis-weight: none; }
-/* its small caps-style labels read smaller than Latin at the same size */
+/* Arm Bebas Neue is all capitals and condensed: in Armenian, small labels run a step larger and all text a
+   little wider so paragraphs and labels stay easy to read */
 html[lang="hy"] { --t-xs: .8rem; }
+html[lang="hy"] body { letter-spacing: .025em; }
+html[lang="hy"] .mono { letter-spacing: .06em; }
 html { background: var(--bay); }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
