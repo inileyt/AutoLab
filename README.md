@@ -45,6 +45,14 @@ python3 tools/make_sources.py       # regenerates SOURCES.md from the files on d
 Armenian (default), English and Russian, switched in the header and remembered per visitor. All page text lives
 in `js/i18n.js`; elements point to it with `data-i18n` keys. To change a text, edit it there in all three languages.
 
+## Fonts
+
+- Latin: Archivo; Cyrillic: Golos Text; labels: IBM Plex Mono (Google Fonts).
+- Armenian: **ERKN** by Tzu-yuan Yin (2013), supplied by the site owner, served from `media/fonts/erkn.woff2`
+  for the Armenian range only (U+0530–058F). The original OTF's CFF outlines fail browser font validation
+  ("Failed validating CharStrings INDEX"), so the web file is the same design with its outlines converted to
+  TrueType. ERKN has no dram sign (֏); that one character falls back to Noto Sans Armenian.
+
 ## Sample content
 
 This is a portfolio project. The price list and the three reviews are sample content written for it, and the page
