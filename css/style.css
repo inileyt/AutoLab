@@ -70,13 +70,19 @@ a { color: inherit; }
 .mono { font-family: var(--f-mono); font-feature-settings: "tnum"; }
 .eyebrow {
   margin: 0 0 1rem; font-size: var(--t-xs); letter-spacing: .18em; text-transform: uppercase; color: var(--steel);
+  display: flex; align-items: center; gap: 12px;
 }
+.eyebrow::before {
+  content: ""; flex: none; width: 28px; height: 2px; background: var(--bar); box-shadow: 0 0 10px var(--bar-glow);
+  transform-origin: left; transform: scaleX(var(--rule, 1)); transition: transform .9s cubic-bezier(.2,.7,.2,1);
+}
+.hero__copy .eyebrow { justify-content: center; }
 .display {
   margin: 0; font-family: var(--f-display); font-weight: 800; font-size: var(--t-xl);
   font-variation-settings: "wdth" 125; line-height: .98; letter-spacing: -.01em; text-transform: uppercase;
   text-wrap: balance;
 }
-.display--sm { font-size: clamp(1.7rem, 3.6vw, 3.2rem); }
+.display--sm { font-size: clamp(2.15rem, 5.4vw, 5.2rem); line-height: .94; letter-spacing: -.015em; }
 
 /* ---------- loader ---------- */
 .loader {
@@ -147,7 +153,12 @@ a { color: inherit; }
   display: block; font-family: var(--f-display); font-weight: 900; font-variation-settings: "wdth" 125;
   font-size: clamp(3rem, 15.5vw, 17rem); letter-spacing: -.02em; white-space: nowrap;
   color: var(--chalk); opacity: .94; will-change: transform, opacity;
+  background: linear-gradient(105deg, var(--chalk) 0%, var(--chalk) 42%, #ffffff 50%, var(--chalk) 58%, var(--chalk) 100%);
+  background-size: 260% 100%; background-position: 100% 0;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  animation: sheen 7s cubic-bezier(.4,0,.2,1) 2.4s infinite;
 }
+@keyframes sheen { 0% { background-position: 100% 0; } 38%, 100% { background-position: 0% 0; } }
 .car {
   --cw: min(70vw, 90vh);
   position: absolute; z-index: 2; left: 50%; bottom: 11%; width: var(--cw); margin-left: calc(var(--cw) / -2);
@@ -374,6 +385,66 @@ a { color: inherit; }
 .foot__small { font-size: .7rem; line-height: 1.7; overflow-wrap: anywhere; }
 .foot__credit { color: var(--chalk); }
 
+/* ---------- polish: colour, type and motion details ---------- */
+/* thin red reading-progress line under the header */
+.progress {
+  position: fixed; z-index: 61; left: 0; right: 0; top: env(safe-area-inset-top, 0px); height: 2px; pointer-events: none;
+  background: var(--bar); box-shadow: 0 0 10px var(--bar-glow); transform-origin: left; transform: scaleX(0);
+}
+/* section headings rise word by word from behind a mask; the last word takes the red */
+.w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+.wi { display: inline-block; will-change: transform; }
+.w.is-accent .wi { color: var(--bar); text-shadow: 0 0 28px var(--bar-glow); }
+/* nav links: an underline that draws in from the left */
+.nav__links a { position: relative; }
+.nav__links a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: right; transition: transform .45s cubic-bezier(.2,.7,.2,1);
+}
+.nav__links a:hover::after { transform: scaleX(1); transform-origin: left; }
+/* buttons: red fill sweeps in under the label */
+.btn { position: relative; overflow: hidden; isolation: isolate; transition: color .35s ease, box-shadow .3s ease; }
+.btn::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; background: var(--bar);
+  transform: translateX(-101%); transition: transform .45s cubic-bezier(.2,.7,.2,1);
+}
+.btn:hover { color: #fff; }
+.btn:hover::before { transform: none; }
+.nav__cta { transition: background .3s ease, color .3s ease; }
+.nav__cta:hover { background: #fff; color: #000; }
+/* price list: a red bar grows on the row under the pointer */
+.price-table tbody tr { position: relative; }
+.price-table tbody th { position: relative; transition: color .3s ease, padding .3s ease; }
+.price-table tbody th::before {
+  content: ""; position: absolute; left: 0; top: 50%; width: 14px; height: 2px; margin-top: -1px; background: var(--bar);
+  transform: scaleX(0); transform-origin: left; transition: transform .35s ease;
+}
+.price-table tbody tr:hover th { color: #fff; padding-left: 24px; }
+.price-table tbody tr:hover th::before { transform: none; }
+/* reviews: lift with a red edge */
+.review { transition: transform .5s cubic-bezier(.2,.7,.2,1), border-color .4s ease, box-shadow .5s ease; }
+.review:hover { transform: translateY(-6px); border-color: rgba(255,43,43,.55); box-shadow: 0 24px 60px -30px var(--bar-glow); }
+/* photo captions warm up on hover */
+.mc, .ic { cursor: default; }
+.mc figcaption, .ic figcaption { transition: color .3s ease, letter-spacing .4s ease; }
+.mc:hover figcaption, .ic:hover figcaption { color: var(--chalk); letter-spacing: .16em; }
+.mc__img img, .ic__img img { transition: filter .5s ease; }
+.mc:hover .mc__img img, .ic:hover .ic__img img { filter: brightness(1.08) contrast(1.04); }
+/* service-name ribbon between sections; it drifts and speeds up with the scroll */
+.ribbon {
+  position: relative; overflow: hidden; border-block: 1px solid var(--line); padding-block: clamp(14px, 2.4vh, 26px);
+  background: linear-gradient(90deg, var(--bay) 0%, transparent 8%, transparent 92%, var(--bay) 100%), var(--bay-2);
+}
+.ribbon__track { display: flex; width: max-content; will-change: transform; }
+.ribbon__group { display: flex; align-items: center; flex: none; }
+.ribbon__item {
+  font-family: var(--f-display); font-weight: 800; font-variation-settings: "wdth" 125; text-transform: uppercase;
+  font-size: clamp(1.4rem, 3.4vw, 3rem); line-height: 1; white-space: nowrap; padding-inline: clamp(16px, 2.2vw, 36px);
+  color: transparent; -webkit-text-stroke: 1px rgba(230, 231, 233, .55);
+}
+.ribbon__item:nth-child(4n+1) { color: var(--chalk); -webkit-text-stroke: 0; }
+.ribbon__dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--bar); box-shadow: 0 0 14px var(--bar-glow); }
+
 /* ---------- responsive ---------- */
 @media (max-width: 1180px) {
   .nav__links { gap: 16px; }
@@ -441,7 +512,16 @@ a { color: inherit; }
   .foot__inner { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 400px) {
+  .nav { gap: 10px; }
+  .nav__mark { letter-spacing: .2em; font-size: .85rem; }
+  .lang button { padding: 6px 4px; }
+  .nav__cta { padding: 6px 8px; font-size: .72rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .hero__word { animation: none; }
+  .btn::before, .review, .nav__links a::after { transition: none; }
   .hero__scroll i::after { animation: none; }
   .cap, .steps li, .loader { transition: none; }
 }

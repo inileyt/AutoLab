@@ -276,8 +276,6 @@
       onToggle: (st) => st.isActive && setSlate("6872165", "cam.book") });
     gsap.fromTo(".book__bg", { scale: 1.03 }, { scale: 1, ease: "none",
       scrollTrigger: { trigger: ".book", start: "top bottom", end: "bottom bottom", scrub: true } });
-    gsap.from(".book .display", { yPercent: 60, opacity: 0, duration: 1.3, ease: "expo.out",
-      scrollTrigger: { trigger: ".book .display", start: "top 85%", once: true } });
 
     /* slate steps aside for the footer copy */
     ScrollTrigger.create({ trigger: ".foot", start: "top bottom-=40", end: "max",
@@ -367,6 +365,85 @@
     document.addEventListener("autolab:lang", () => {
       renderContacts(); renderNote(); setSlate(...slateNow);
       ScrollTrigger.refresh();
+    });
+
+    /* ---------- polish: reading progress, word-by-word headings, red rules, price counters, ribbons ---------- */
+    const progressBar = $("#progress");
+    ScrollTrigger.create({ start: 0, end: "max", onUpdate: (st) => { progressBar.style.transform = `scaleX(${st.progress})`; } });
+
+    // section headings: each word rises from behind a mask; the last word is red
+    const HEADS = ".macro__head h2, .interior__head h2, .services__head h2, .prices__head h2, .reviews__head h2, .book .display";
+    function splitWords(el) {
+      const text = el.textContent.trim().replace(/\s+/g, " ");
+      if (el.dataset.split === text) return;
+      const words = text.split(" ");
+      el.setAttribute("aria-label", text);
+      el.innerHTML = words.map((w, i) => `<span class="w${i === words.length - 1 && words.length > 1 ? " is-accent" : ""}" aria-hidden="true"><span class="wi">${esc(w)}</span></span>`).join(" ");
+      el.dataset.split = text;
+      gsap.set($$(".wi", el), { yPercent: reduceMotion || el.dataset.shown === "1" ? 0 : 110 });
+    }
+    $$(HEADS).forEach((el) => {
+      splitWords(el);
+      if (reduceMotion) return;
+      ScrollTrigger.create({ trigger: el, start: "top 88%",
+        onEnter: () => { el.dataset.shown = "1"; gsap.to($$(".wi", el), { yPercent: 0, duration: 1.1, ease: "expo.out", stagger: .07, overwrite: true }); },
+        onLeaveBack: () => { el.dataset.shown = "0"; gsap.to($$(".wi", el), { yPercent: 110, duration: .3, ease: "power2.in", overwrite: true }); },
+      });
+    });
+
+    // the short red rule beside each small heading draws in as it arrives
+    if (!reduceMotion) $$(".eyebrow").filter((e) => !e.closest(".hero")).forEach((el) => {
+      el.style.setProperty("--rule", "0");
+      ScrollTrigger.create({ trigger: el, start: "top 90%",
+        onEnter: () => el.style.setProperty("--rule", "1"), onLeaveBack: () => el.style.setProperty("--rule", "0") });
+    });
+
+    // prices count up once, the first time the list comes into view
+    const priceCells = $$(".price-table td").filter((td) => /֏/.test(td.textContent));
+    const priceNodes = priceCells.map((td) => {
+      const node = [...td.childNodes].find((n) => n.nodeType === 3 && /\d/.test(n.textContent));
+      const value = node ? +node.textContent.replace(/[^\d]/g, "") : 0;
+      return { node, value, tail: node ? node.textContent.replace(/^[\d\s]+/, "") : "" };
+    }).filter((p) => p.node);
+    const fmt = (v) => String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    if (!reduceMotion && priceNodes.length) {
+      priceNodes.forEach((p) => { p.node.textContent = "0 " + p.tail; });
+      ScrollTrigger.create({ trigger: ".price-table", start: "top 82%", once: true, onEnter: () => {
+        priceNodes.forEach((p, i) => {
+          const o = { v: 0 };
+          gsap.to(o, { v: p.value, duration: 1.4, delay: Math.floor(i / 2) * .08, ease: "power3.out",
+            onUpdate: () => { p.node.textContent = fmt(o.v) + " " + p.tail; } });
+        });
+      } });
+    }
+
+    // ribbons of service names: a slow drift that speeds up with the scroll and follows its direction
+    const RIBBON_KEYS = ["svc.1", "step.3", "price.2", "price.4", "price.5", "price.6", "svc.3"];
+    const ribbons = $$(".ribbon").map((rb, n) => {
+      const track = $(".ribbon__track", rb);
+      const render = () => {
+        const group = `<div class="ribbon__group">${RIBBON_KEYS.map((k) => `<span class="ribbon__item">${esc(t(k))}</span><i class="ribbon__dot"></i>`).join("")}</div>`;
+        track.innerHTML = group + group;
+      };
+      render();
+      const dir = rb.classList.contains("ribbon--rev") ? 1 : -1;
+      const tween = reduceMotion ? null : gsap.fromTo(track, { xPercent: dir < 0 ? 0 : -50 }, { xPercent: dir < 0 ? -50 : 0, duration: 48, ease: "none", repeat: -1 });
+      return { render, tween };
+    });
+    if (!reduceMotion) {
+      let boost = gsap.to({}, {});
+      ScrollTrigger.create({ start: 0, end: "max", onUpdate: (st) => {
+        const v = st.getVelocity(), speed = gsap.utils.clamp(1, 7, 1 + Math.abs(v) / 350), sign = v < 0 ? -1 : 1;
+        ribbons.forEach((r) => r.tween && r.tween.timeScale(speed * sign));
+        boost.kill();
+        boost = gsap.to(ribbons.map((r) => r.tween).filter(Boolean), { timeScale: sign, duration: 1.2, ease: "power2.out", delay: .1 });
+      } });
+    }
+
+    // after a language switch the headings get new words: split them again, keep their shown state
+    document.addEventListener("autolab:lang", () => {
+      $$(HEADS).forEach((el) => { el.dataset.split = ""; splitWords(el); });
+      ribbons.forEach((r) => r.render());
     });
 
     window.addEventListener("load", () => ScrollTrigger.refresh());
